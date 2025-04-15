@@ -1,0 +1,62 @@
+---
+title: "Trends in Global Education Enrollment"
+author: "Aanya Vusirikala (Emory ID: 2558223), Anushka Basu (Emory ID: 2551669), Saanvi Sood (Emory ID: 2494531), Brian Tekadtuera (Emory ID: 2577545)"
+format:
+  html:
+    theme: darkly # Added a dark theme
+    css: styles.css # Link to a custom CSS file for further styling
+    toc: true
+    toc-depth: 3
+    number-sections: true
+    highlight-style: github # Different code highlighting style
+  pdf:
+    documentclass: article
+    classoption: twocolumn # Example PDF option
+jupyter: python3
+---
+
+\documentclass{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+
+\definecolor{emoryblue}{HTML}{003366}
+\definecolor{emorygold}{HTML}{FFC82E}
+\definecolor{lightgray}{HTML}{D3D3D3}
+
+\newcommand{\indicator}[1]{\texttt{#1}}
+
+::: {.callout-note appearance="minimal"}
+## Report Highlights
+
+This report analyzes the evolution of primary, secondary, and tertiary school enrollment trends from 1990 to 2023 in Afghanistan, India, and Japan, representing different stages of economic development.
+:::
+
+# Introduction
+
+Education is a cornerstone of societal development, and enrollment trends offer crucial insight into a country's progress toward equitable access and human capital formation. This report explores how primary, secondary, and tertiary school enrollment has evolved over the last three decades in three countries representing different levels of development: Afghanistan (Least Developed Country - LDC), India (Middle-Income Developing Country - MDC), and Japan (Developed Country - DC).
+
+# Data Description
+
+The data was sourced from the World Bank’s World Development Indicators via the \indicator{wbgapi} Python package. Three key indicators were used to assess enrollment across different educational levels:
+
+- Primary school enrollment, gross (%): \indicator{SE.PRM.ENRR}
+- Secondary school enrollment, gross (%): \indicator{SE.SEC.ENRR}
+- Tertiary school enrollment, gross (%): \indicator{SE.TER.ENRR}
+
+Data was collected for the years 1990–2023 for Afghanistan, India, and Japan. After importing the data, it was reshaped to a long format using \texttt{pandas} for facilitating subsequent analysis and visualization. Missing values were handled appropriately during the data cleaning process to ensure the integrity of the analysis.
+
+# Methodology
+
+The analysis involved:
+
+1.  **Data Acquisition:** Utilizing the \indicator{wbgapi} package in Python to retrieve the enrollment data for the selected countries and indicators.
+2.  **Data Wrangling:** Employing \texttt{pandas} to reshape the data into a long format, making it suitable for time-series analysis and plotting.
+3.  **Missing Value Handling:** Implementing appropriate strategies to address any missing data points to avoid biases in the analysis.
+4.  **Visualization:** Generating informative line plots using a suitable visualization library (e.g., \texttt{matplotlib}, \texttt{seaborn}, or \texttt{plotly}) to illustrate the enrollment trends over time for each country and educational level.
+
+# Results
+
+[*(Placeholder for Results and Visualizations - You would typically insert your Python code chunks here to generate plots and then describe the findings.)*]
+
+For example, a code chunk to generate a plot might look like this:
+
