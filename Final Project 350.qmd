@@ -3,60 +3,62 @@ title: "Trends in Global Education Enrollment"
 author: "Aanya Vusirikala (Emory ID: 2558223), Anushka Basu (Emory ID: 2551669), Saanvi Sood (Emory ID: 2494531), Brian Tekadtuera (Emory ID: 2577545)"
 format:
   html:
-    theme: darkly # Added a dark theme
-    css: styles.css # Link to a custom CSS file for further styling
+    theme: darkly 
     toc: true
     toc-depth: 3
     number-sections: true
-    highlight-style: github # Different code highlighting style
+    highlight-style: github  
   pdf:
     documentclass: article
-    classoption: twocolumn # Example PDF option
+    classoption: twocolumn  
 jupyter: python3
 ---
 
-\documentclass{amsmath}
-\usepackage{amsfonts}
-\usepackage{amssymb}
-
-\definecolor{emoryblue}{HTML}{003366}
-\definecolor{emorygold}{HTML}{FFC82E}
-\definecolor{lightgray}{HTML}{D3D3D3}
-
-\newcommand{\indicator}[1]{\texttt{#1}}
-
-::: {.callout-note appearance="minimal"}
 ## Report Highlights
 
-This report analyzes the evolution of primary, secondary, and tertiary school enrollment trends from 1990 to 2023 in Afghanistan, India, and Japan, representing different stages of economic development.
+Oour report analyzes the evolution of primary, secondary, and tertiary school enrollment trends from 1990 to 2023 (this was collected in the dataset) in Afghanistan, India, and Japan, representing different stages of economic development.
 :::
 
 # Introduction
 
-Education is a cornerstone of societal development, and enrollment trends offer crucial insight into a country's progress toward equitable access and human capital formation. This report explores how primary, secondary, and tertiary school enrollment has evolved over the last three decades in three countries representing different levels of development: Afghanistan (Least Developed Country - LDC), India (Middle-Income Developing Country - MDC), and Japan (Developed Country - DC).
+This project hopes to analyze education levels across three nations with different levels of economic development: Afghanistan (Less Developed Country - LDC), India (More Developed Country - MDC), and Japan (Developed Country- DC). Specifically, we aim to assess school enrollment at different levels in the education system, as sourced from the World Bank. The indicators under investigation include: School enrollment, primary (% gross) (SE.PRM.ENRR); School enrollment, secondary (% gross) (SE.SEC.ENRR); and School enrollment, tertiary (% gross) (SE.TER.ENRR). 
+
+
+By conducting this analysis, we hope to assess the relationship between a country’s economic status and the state of its educational enrollment. This can lead to possible discussions surrounding how the level of investment, accessibility, and quality of schools can be impacted by a nation’s degree of economic advancement, or on the flip side, how lower enrollment impacts the financial standing of a country. 
 
 # Data Description
 
-The data was sourced from the World Bank’s World Development Indicators via the \indicator{wbgapi} Python package. Three key indicators were used to assess enrollment across different educational levels:
+The data was sourced from the World Bank’s World Development Indicators via the \indicator{wbgapi} Python package. We selected three key indicators were used to assess enrollment across different educational levels:
 
 - Primary school enrollment, gross (%): \indicator{SE.PRM.ENRR}
 - Secondary school enrollment, gross (%): \indicator{SE.SEC.ENRR}
 - Tertiary school enrollment, gross (%): \indicator{SE.TER.ENRR}
 
-Data was collected for the years 1990–2023 for Afghanistan, India, and Japan. After importing the data, it was reshaped to a long format using \texttt{pandas} for facilitating subsequent analysis and visualization. Missing values were handled appropriately during the data cleaning process to ensure the integrity of the analysis.
+Data was collected for the years 1971–2020 for Afghanistan, India, and Japan. We wanted to make sure all the countries had the same year range so we removed years before and after (i.e. 1970) if they were not included in all three datasets. 
 
-# Methodology
+Because missing values were sparesely present (i.e.missing tertiary school enrollment for 2003-2006 in Afghanistan) we decided not to drop NaNs because that would result in removing several years of data.  
 
-The analysis involved:
+# Data Analysis
 
-1.  **Data Acquisition:** Utilizing the \indicator{wbgapi} package in Python to retrieve the enrollment data for the selected countries and indicators.
-2.  **Data Wrangling:** Employing \texttt{pandas} to reshape the data into a long format, making it suitable for time-series analysis and plotting.
-3.  **Missing Value Handling:** Implementing appropriate strategies to address any missing data points to avoid biases in the analysis.
-4.  **Visualization:** Generating informative line plots using a suitable visualization library (e.g., \texttt{matplotlib}, \texttt{seaborn}, or \texttt{plotly}) to illustrate the enrollment trends over time for each country and educational level.
+```{python}
+import 
+df_india = pd.read_csv('india_enrollment.csv')
 
-# Results
+
+```
+
+
+# Results 
 
 [*(Placeholder for Results and Visualizations - You would typically insert your Python code chunks here to generate plots and then describe the findings.)*]
 
 For example, a code chunk to generate a plot might look like this:
+
+
+# Dicusssion
+
+
+# Conclusion
+
+
 
