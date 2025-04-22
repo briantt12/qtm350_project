@@ -1,0 +1,6 @@
+Column Name,Data Type,Description
+Year,INTEGER,"The calendar year the enrollment data refers to."
+Country,TEXT,"The country name (e.g., India, Japan, Afghanistan)."
+Primary Enrollment,REAL,"Gross enrollment ratio (%) for primary education."
+Secondary Enrollment,REAL,"Gross enrollment ratio (%) for secondary education."
+Tertiary Enrollment,REAL,"Gross enrollment ratio (%) for tertiary (higher) education."
