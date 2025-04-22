@@ -36,13 +36,267 @@ The data was sourced from the World Bank’s World Development Indicators via th
 
 Data was collected for the years 1971–2020 for Afghanistan, India, and Japan. We wanted to make sure all the countries had the same year range so we removed years before and after (i.e. 1970) if they were not included in all three datasets. 
 
-Because missing values were sparesely present (i.e.missing tertiary school enrollment for 2003-2006 in Afghanistan) we decided not to drop NaNs because that would result in removing several years of data.  
+Because missing values were sparesely present (i.e.missing tertiary school enrollment for 2003-2006 in Afghanistan) we decided not to drop NaNs because that would result in removing several years of data.
+
+### Merging and cleaning procedures:
+
+- Defined an indicator dictionary mapping indicator names to their World Bank codes
+
+- Merged data from all three indicators for each country into one table
+
+- Transposed table so each row represents a year
+
+- Converted a dataframe into an in-memory SQLite database
+
+- Separated data into three country specific tables (Afghanistan, India, Japan)
+
+- Renamed columns for easier readability
+
+- Converted country tables to csv
+
 
 # Data Analysis
 
+We began by plotting the primary, secondary, and teritary enrollment levels for each country to get a feel for the data. The code is hidden her for readability but is available in our scripts folder!
+
 ```{python}
-import 
-df_india = pd.read_csv('india_enrollment.csv')
+#| echo: false
+
+import pandas as pd
+
+```
+
+```{python}
+#| echo: false
+
+
+df_india = pd.read_csv('data/india_enrollment.csv')
+
+df_japan = pd.read_csv('data/japan_enrollment.csv')
+
+df_afghanistan = pd.read_csv('data/afghanistan_enrollment.csv')
+
+
+df_japan['Year'] = df_japan['Year'].str.replace('YR', '').astype(int)
+
+df_india['Year'] = df_india['Year'].str.replace('YR', '').astype(int)
+
+df_afghanistan['Year'] = df_afghanistan['Year'].str.replace('YR', '').astype(int)
+
+```
+
+## Plot India enrollement levels
+
+```{python}
+#| echo: false
+
+
+import plotly.express as px
+
+df_long = df_india.melt(
+    id_vars=['Year'],
+    value_vars=['Primary Enrollment', 'Secondary Enrollment', 'Tertiary Enrollment'],
+    var_name='Level',
+    value_name='Enrollment'
+)
+
+fig = px.line(
+    df_long,
+    x='Year',
+    y='Enrollment',
+    color='Level',
+    markers=True,
+    title='Enrollment by Level over Time (India)',
+    labels={'Enrollment':'% Enrolled','Level':'School Level'}
+)
+fig.update_layout(hovermode='x unified')
+fig.show()
+```
+
+## Japan enrollement levels
+
+```{python}
+#| echo: false
+
+df_long = df_japan.melt(
+    id_vars=['Year'],
+    value_vars=['Primary Enrollment', 'Secondary Enrollment', 'Tertiary Enrollment'],
+    var_name='Level',
+    value_name='Enrollment'
+)
+
+fig = px.line(
+    df_long,
+    x='Year',
+    y='Enrollment',
+    color='Level',
+    markers=True,
+    title='Enrollment by Level over Time (Japan)',
+    labels={'Enrollment':'% Enrolled','Level':'School Level'}
+)
+
+fig.update_layout(hovermode='x unified')
+fig.show()
+
+```
+
+## Afghanistan enrollement levels
+
+```{python}
+#| echo: false
+
+df_long = df_afghanistan.melt(
+    id_vars=['Year'],
+    value_vars=['Primary Enrollment', 'Secondary Enrollment', 'Tertiary Enrollment'],
+    var_name='Level',
+    value_name='Enrollment'
+)
+
+fig = px.line(
+    df_long,
+    x='Year',
+    y='Enrollment',
+    color='Level',
+    markers=True,
+    title='Enrollment by Level over Time (Afghanistan)',
+    labels={'Enrollment':'% Enrolled','Level':'School Level'}
+)
+
+fig.update_layout(hovermode='x unified')
+fig.show()
+
+```
+
+## Pie Chart Visualization
+```{python}
+
+#| echo: false
+df = pd.concat([df_japan, df_india, df_afghanistan], ignore_index=True)
+
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
+
+# Prepare your melted DataFrame
+df_melt = (
+    df
+    .melt(
+        id_vars=['Year','Country'],
+        value_vars=['Primary Enrollment','Secondary Enrollment','Tertiary Enrollment'],
+        var_name='Level',
+        value_name='Enrollment'
+    )
+    .dropna(subset=['Enrollment'])
+)
+
+years     = sorted(df_melt['Year'].unique())
+countries = df_melt['Country'].unique().tolist()
+
+# Create one pie subplot per country
+fig = make_subplots(
+    rows=len(countries),
+    cols=1,
+    specs=[[{"type":"domain"}] for _ in countries],
+    subplot_titles=countries
+)
+
+# Add the initial frame (first year)
+for i, country in enumerate(countries, start=1):
+    data0 = df_melt.query("Year == @years[0] and Country == @country")
+    fig.add_trace(
+        go.Pie(labels=data0['Level'], values=data0['Enrollment'], name=country),
+        row=i, col=1
+    )
+
+# Build each subsequent frame
+frames = []
+for yr in years:
+    frame_traces = []
+    for country in countries:
+        d = df_melt.query("Year == @yr and Country == @country")
+        frame_traces.append(go.Pie(labels=d['Level'], values=d['Enrollment']))
+    frames.append(go.Frame(data=frame_traces, name=str(yr)))
+
+fig.frames = frames
+
+# Add play button & slider
+fig.update_layout(
+    updatemenus=[dict(
+        type="buttons",
+        showactive=False,
+        y=1.05,
+        x=1.15,
+        xanchor="right",
+        yanchor="top",
+        buttons=[dict(
+            label="Play",
+            method="animate",
+            args=[None, {
+                "frame": {"duration": 700, "redraw": True},
+                "fromcurrent": True
+            }]
+        )]
+    )],
+    sliders=[dict(
+        steps=[dict(
+            method="animate",
+            args=[[str(yr)], {"mode":"immediate","frame":{"redraw":True}}],
+            label=str(yr)
+        ) for yr in years],
+        transition={"duration": 0},
+        x=0.1, y=0, currentvalue={"prefix":"Year: "}
+    )],
+    title="Enrollment Distribution by School Level Over Time",
+    template="plotly_white",
+    margin=dict(l=20, r=20, t=80, b=20),
+    height=300 * len(countries)
+)
+
+fig.show()
+```
+
+
+
+## Tertiary School Enrollment Plot
+```{python}
+#| echo: false
+
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# 1. Load each country’s data
+japan_df = pd.read_csv("data/japan_enrollment.csv")
+india_df = pd.read_csv("data/india_enrollment.csv")
+afg_df   = pd.read_csv("data/afghanistan_enrollment.csv")
+
+# 2. Tag with country names
+japan_df["Country"] = "Japan"
+india_df["Country"] = "India"
+afg_df["Country"]   = "Afghanistan"
+
+# 3. Combine into one DataFrame
+df = pd.concat([japan_df, india_df, afg_df], ignore_index=True)
+
+# 4. Keep only the tertiary column
+tertiary = df[["Country", "Year", "Tertiary Enrollment"]].copy()
+tertiary.rename(columns={"Tertiary Enrollment": "Enrollment"}, inplace=True)
+
+# 5. Clean Year and filter 1990–2023
+tertiary["Year"] = tertiary["Year"].str.extract(r"(\d+)").astype(int)
+tertiary = tertiary[(tertiary.Year >= 1970) & (tertiary.Year <= 2023)]
+
+# 6. Plot
+plt.figure(figsize=(10, 6))
+for country, group in tertiary.groupby("Country"):
+    plt.plot(group.Year, group.Enrollment, label=country)
+
+plt.title("Tertiary School Enrollment (1990–2023)")
+plt.xlabel("Year")
+plt.ylabel("Tertiary Enrollment (% gross)")
+plt.xticks(rotation=45)
+plt.legend()
+plt.tight_layout()
+plt.show()
+
 
 
 ```
