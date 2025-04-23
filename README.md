@@ -4,11 +4,11 @@
 The goal of this project to conduct a comprehensive data analysis using real-world data from the World Bank's World Development Indicators. We are specifically focused on assessing the relationship between primary, secondary, and tertiary school enrollment trends and a country's current economic status. Our project involves data cleaning with SQL, modeling and visualization in Python, and version control with GitHub.
 
 ## 🔍 Project Topic
-**Topic Chosen:** [Education]  
+**Topic Chosen:** Education  
 **Indicators Used:**
-- [Indicator 1: SE.PRM.ENRR (School enrollment, primary (% gross))]
-- [Indicator 2: SE.SEC.ENRR (School enrollment, secondary (% gross))]
-- [Indicator 3: SE.TER.ENRR (School enrollment, tertiary (% gross))]
+- Indicator 1: SE.PRM.ENRR (School enrollment, primary (% gross))
+- Indicator 2: SE.SEC.ENRR (School enrollment, secondary (% gross))
+- Indicator 3: SE.TER.ENRR (School enrollment, tertiary (% gross))
 
 ## 🗂 Repository Structure
 ```
@@ -39,10 +39,10 @@ cd qtm350_project
   ```
 
 ## 👥 Team Members
-- [Brian Tekadtuera]
-- [Aanya Vusirikala]
-- [Saanvi Sood]
-- [Anushka Basu]
+- Brian Tekadtuera
+- Aanya Vusirikala
+- Saanvi Sood
+- Anushka Basu
 
 ## 📈 Key Features
 - Use of SQL for data wrangling and cleaning
