@@ -167,124 +167,75 @@ fig.show()
 
 ```
 
-## Pie Chart Visualization
+## Bar Chart Visualization
+This bar chart is animated with the help of ChatGPT in order to show how enrollment rates vary by year. This is similar to the previous three graphs but enables us to see all the information in one place!
+
 ```{python}
 
 #| echo: false
 df = pd.concat([df_japan, df_india, df_afghanistan], ignore_index=True)
+import pandas as pd
+import plotly.express as px
 
-import plotly.graph_objects as go
-from plotly.subplots import make_subplots
-
-# Prepare your melted DataFrame
+# Assuming df is already defined in your environment
 df_melt = (
     df
     .melt(
-        id_vars=['Year','Country'],
-        value_vars=['Primary Enrollment','Secondary Enrollment','Tertiary Enrollment'],
+        id_vars=['Year', 'Country'],
+        value_vars=['Primary Enrollment', 'Secondary Enrollment', 'Tertiary Enrollment'],
         var_name='Level',
         value_name='Enrollment'
     )
     .dropna(subset=['Enrollment'])
 )
 
-years     = sorted(df_melt['Year'].unique())
-countries = df_melt['Country'].unique().tolist()
-
-# Create one pie subplot per country
-fig = make_subplots(
-    rows=len(countries),
-    cols=1,
-    specs=[[{"type":"domain"}] for _ in countries],
-    subplot_titles=countries
+# Create an animated stacked bar chart faceted by country
+fig = px.bar(
+    df_melt,
+    x='Level',
+    y='Enrollment',
+    color='Level',
+    text='Enrollment',
+    animation_frame='Year',
+    facet_row='Country',
+    title='Enrollment Distribution by School Level Over Time',
+    labels={'Level': 'School Level', 'Enrollment': 'Enrollment'},
+    template='plotly_white'
 )
 
-# Add the initial frame (first year)
-for i, country in enumerate(countries, start=1):
-    data0 = df_melt.query("Year == @years[0] and Country == @country")
-    fig.add_trace(
-        go.Pie(labels=data0['Level'], values=data0['Enrollment'], name=country),
-        row=i, col=1
-    )
-
-# Build each subsequent frame
-frames = []
-for yr in years:
-    frame_traces = []
-    for country in countries:
-        d = df_melt.query("Year == @yr and Country == @country")
-        frame_traces.append(go.Pie(labels=d['Level'], values=d['Enrollment']))
-    frames.append(go.Frame(data=frame_traces, name=str(yr)))
-
-fig.frames = frames
-
-# Add play button & slider
-fig.update_layout(
-    updatemenus=[dict(
-        type="buttons",
-        showactive=False,
-        y=1.05,
-        x=1.15,
-        xanchor="right",
-        yanchor="top",
-        buttons=[dict(
-            label="Play",
-            method="animate",
-            args=[None, {
-                "frame": {"duration": 700, "redraw": True},
-                "fromcurrent": True
-            }]
-        )]
-    )],
-    sliders=[dict(
-        steps=[dict(
-            method="animate",
-            args=[[str(yr)], {"mode":"immediate","frame":{"redraw":True}}],
-            label=str(yr)
-        ) for yr in years],
-        transition={"duration": 0},
-        x=0.1, y=0, currentvalue={"prefix":"Year: "}
-    )],
-    title="Enrollment Distribution by School Level Over Time",
-    template="plotly_white",
-    margin=dict(l=20, r=20, t=80, b=20),
-    height=300 * len(countries)
-)
-
+fig.update_traces(textposition='outside', marker_line_width=0.5)
+fig.update_layout(showlegend=False, height=300 * df_melt['Country'].nunique(), margin=dict(l=20, r=20, t=80, b=20))
 fig.show()
 ```
 
 
 
 ## Tertiary School Enrollment Plot
+[insert anushka blurb here]
+
 ```{python}
 #| echo: false
 
 import pandas as pd
 import matplotlib.pyplot as plt
 
-# 1. Load each country’s data
 japan_df = pd.read_csv("data/japan_enrollment.csv")
 india_df = pd.read_csv("data/india_enrollment.csv")
 afg_df   = pd.read_csv("data/afghanistan_enrollment.csv")
 
-# 2. Tag with country names
 japan_df["Country"] = "Japan"
 india_df["Country"] = "India"
 afg_df["Country"]   = "Afghanistan"
 
-# 3. Combine into one DataFrame
+# Combine into one DataFrame
 df = pd.concat([japan_df, india_df, afg_df], ignore_index=True)
 
-# 4. Keep only the tertiary column
 tertiary = df[["Country", "Year", "Tertiary Enrollment"]].copy()
 tertiary.rename(columns={"Tertiary Enrollment": "Enrollment"}, inplace=True)
 
-# 5. Clean Year and filter 1990–2023
 tertiary["Year"] = tertiary["Year"].str.extract(r"(\d+)").astype(int)
 tertiary = tertiary[(tertiary.Year >= 1970) & (tertiary.Year <= 2023)]
 
-# 6. Plot
 plt.figure(figsize=(10, 6))
 for country, group in tertiary.groupby("Country"):
     plt.plot(group.Year, group.Enrollment, label=country)
@@ -302,17 +253,92 @@ plt.show()
 ```
 
 
-# Results 
+## Tertiary School Enrollment (with intraplation to fill in missing values)
+We used linear intrapolation to fill in missing values to create a more "smooth" and complete looking plot of tertiary enrollment.
 
-[*(Placeholder for Results and Visualizations - You would typically insert your Python code chunks here to generate plots and then describe the findings.)*]
+```{python}
+#| echo: false
 
-For example, a code chunk to generate a plot might look like this:
+years = list(range(1970, 2024))
+smoothed = []
+
+for country, grp in tertiary.groupby("Country"):
+    grp = grp.set_index("Year").reindex(years)
+    grp["Country"] = country
+    # linear interpolation of Enrollment
+    grp["Enrollment"] = grp["Enrollment"].interpolate(method="linear")
+    smoothed.append(grp.reset_index())
+
+tertiary_smooth = pd.concat(smoothed)
+
+plt.figure(figsize=(10, 6))
+for country, group in tertiary_smooth.groupby("Country"):
+    plt.plot(group.Year, group.Enrollment, label=country)
+
+plt.title("Tertiary School Enrollment (1970–2023)")
+plt.xlabel("Year")
+plt.ylabel("Tertiary Enrollment (% gross)")
+plt.xticks(rotation=45)
+plt.legend()
+plt.tight_layout()
+plt.show()
 
 
-# Dicusssion
+```
+
+# Tables
+
+## Table with Summary Statistics
+```{python}
+
+
+
+
+
+
+```
+
+
+
+
+# Results and Dicussion
+[*INSERT  HERE*]
+
+results
 
 
 # Conclusion
+insert here
 
+## Further Reading
+
+- **World Bank Website**  
+  World bank data.  
+  <https://www.worldbank.org/>
+
+- **World Bank API Documentation**  
+  Instructions on how to query the World Bank’s data API and pull indicators programmatically.  
+  <https://datahelpdesk.worldbank.org/knowledgebase/topics/125589-developer-information>
+
+
+- **Primary School Enrollment**  
+  Where we sourced our data on primary enrollment levels.  
+  <https://data.worldbank.org/indicator/SE.PRM.ENRR>
+
+- **Secondary School Enrollment**  
+  Where we sourced our data on secondary enrollment levels.  
+  <https://data.worldbank.org/indicator/SE.SEC.ENRR>
+
+- **Tertiary School Enrollment**  
+  Where we sourced our data on tertiary enrollment levels.  
+  <https://data.worldbank.org/indicator/SE.TER.ENRR>
+
+- **Impact of education on economic development**  
+ Research into importance of education in economic development and beyond  
+  <https://www.csis.org/analysis/investing-quality-education-economic-development-peace-and-stability>
+
+
+  
+  
 
 
