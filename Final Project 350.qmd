@@ -1,6 +1,7 @@
 ---
 title: "Trends in Global Education Enrollment"
 author: "Aanya Vusirikala (Emory ID: 2558223), Anushka Basu (Emory ID: 2551669), Saanvi Sood (Emory ID: 2494531), Brian Tekadtuera (Emory ID: 2577545)"
+bibliography: references.bib
 format:
   html:
     theme: darkly 
@@ -53,6 +54,17 @@ Because missing values were sparesely present (i.e.missing tertiary school enrol
 - Renamed columns for easier readability
 
 - Converted country tables to csv
+
+
+### Summary Statistics in tabular format
+Note that some of these numbers are greater than 100 because of how enrollment ratio is calculated by the world data bank. See definitions here: [@wdi-tertiary-meta2025]
+
+| Country       | Avg Primary Enrollment | Avg Secondary Enrollment | Avg Tertiary Enrollment |
+|---------------|------------------------|--------------------------|-------------------------|
+| India         | 96.7647                | 51.1813                  | 13.9066                 |
+| Japan         | 102.7267               | 97.8190                  | 38.8526                 |
+| Afghanistan   | 62.8094                | 26.3104                  | 2.9356                  |
+
 
 
 # Data Analysis
@@ -211,7 +223,7 @@ fig.show()
 
 
 ## Tertiary School Enrollment Plot
-[insert anushka blurb here]
+We chose to run further analyses zooming in on tertiary enrollment. The motivation behind this was that tertiary enrollement captures each country’s capacity to educate and retain students beyond compulsory schooling, which is a key indicator of development and long-term economic growth. [@worldbank-tertiaryeducation-topic]
 
 ```{python}
 #| echo: false
@@ -288,27 +300,74 @@ plt.show()
 
 # Tables
 
-## Table with Summary Statistics
-```{python}
+## Tertiary School Enrollment Table
+| Country       | Avg. Tertiary Enrollment (%) |
+|---------------|-------------------------------|
+| India         | 13.91                         |
+| Japan         | 38.85                         |
+| Afghanistan   |  2.94                         |
 
+## Tertiary School Enrollment Differences Table
 
-
-
-
-
-```
-
-
+| Country Pair               | Avg. Tertiary Enrollment (Country A) | Avg. Tertiary Enrollment (Country B) | Difference (B − A) |
+|-----------------------------|--------------------------------------|--------------------------------------|--------------------|
+| India vs. Japan             | 13.91 %                              | 38.85 %                              | +24.94           |
+| India vs. Afghanistan       | 13.91 %                              | 2.94 %                               | −10.97           |
+| Afghanistan vs. Japan       | 2.94 %                               | 38.85 %                              | +35.92           |
 
 
 # Results and Dicussion
-[*INSERT  HERE*]
+In this section we will dicuss and interpret our results based on our data analyses and visualizations!
 
-results
+The observed enrollment trends across Afghanistan, India, and Japan align with their respective stages of economic development, as outlined in the introduction.
+
+## Afghanistan Analyses Discussion
+
+Afghanistan had relatively low primary, secondary, and tertiary enrollment from 1970 to 2000. However, looking at our data visualization, we noticed that primary enrollment skyrocketed in the early 2000s.  Upon further research, it seems like this increase in enrollment is likely caused by the fall of the Taliban which led to a subsequent influx of international aid and development efforts. [@epdc-afghanistan2025]
+
+This major event also seems to have some spillover effects to secondary enrollment figures, which increased from ~14% in 2003 to ~57% in 2018. 
+
+Moving forward to the tertiary enrollment rates, they were quite consistent from 1970-1979, ranging from ~0.8%-2%. Further on, due to limited and sporadic data, it is difficult to make any concrete conclusions, in regards to tertiary enrollment in Afghanistan. 
+
+
+
+## India Analyses Discussion
+
+India’s primary enrollment rate has stayed above 80% since 1972.  Starting in 2002, is when it exceeded 100%, and has remained so until 2020, excluding a small dip in 2019 to 99.5%. This may be associated with the release of the Sarva Shiksha Abhiyan (SSA) campaign, meaning "Education for All”. This was a major education initiative in India launched in 2001-2002 to provide free and compulsory elementary education for all children aged 6-14 by 2010.
+[@dsel-planning2019]
+
+We see that over time, the gap between the secondary and primary enrollment rates has reduced, from ~55% in 1972 to ~24% in 2020. This gap has consistently reduced since the 70s, but especially starting 1999. 
+
+Finally, observing the tertiary enrollment, it stayed quite consistent from 1976 to 1999, between ~5-7%.  However, starting 2000, we see a gradual increase, reaching ~30% by 2020, with a ~47% gap with secondary enrollment.
+
+
+## Japan Analyses Discussion
+
+Japan has consistently high enrollment rates at all levels. We see that primary enrollment rates are approaching 100%, exemplifying a standard norm of attendance.
+
+This norm also translates to secondary education, which has been above 90% from 1972 until 2020.  This deviates from what we saw in India, which had a 24% gap between its primary and secondary enrollment rates in 2020.
+
+However, this is not seen when looking at tertiary enrollment, which was at 62% in 2020. Regardless, it has seen a dramatic ~40%  growth since 1972, especially increasing between 1998 and 2020.. 
+
+
+
+## Tertiary School Enrollment Analyses Dicussion
+
+In addition to comparing overall enrollment distributions by country, we chose to focus on tertiary gross enrollment ratios, which are an indicator of higher-education access. As defined by the World Bank, *"Gross enrollment ratio is the ratio of total enrollment, regardless of age, to the population of the age group that officially corresponds to the level of education shown."* Tertiary education, whether or not to an advanced research qualification, normally requires, as a minimum condition of admission, the successful completion of education at the secondary level” 
+
+From 1970 through 2000, India and Afghanistan exhibited very similar tertiary enrollment levels, with both remaining largely flat over that period. India’s rates were consistently just above Afghanistan’s, reflecting its somewhat higher development status. In contrast, Japan, which served as our benchmark for a high-income and economically developed country, started at substantially higher tertiary enrollment and showed a steady, almost linear rise from 1970 to 2020. After 2000, India and Afghanistan both began to see modest increases in tertiary participation, though they still lag well behind Japan’s sustained growth.
+
 
 
 # Conclusion
-insert here
+Our project revealed clear links between economic development and school enrollment patterns. Japan, as a high-income country, consistently maintains very high primary and secondary enrollment and shows the strongest, most sustained growth in tertiary participation. However, as we expected less developed nations (i.e. India and Afghanistan) show far lower enrollement rates and less increase in these enrollment rates. This trend is especially evident in terms of teritary enrollment. These disparities underscore the importance of economic resources and policy that priorities access to higher education. Research indicates that enrollement rates and economic development and growth go hand in hand; accelerating economic development means investing in education at every level, particuarly tertiary education. [@csis-education2025]
+
+## Future Steps
+- **Expand the countries used.**  It would be interesting to add a few more middle-income countries (e.g., Brazil, South Africa) to see how they compare to the three countries currently in our dataset
+- **Forecast future trends.**  It would be interesting to extrapolate our data to forecast how enrollement rates will change in the next 5 to 10 years!
+
+
+
 
 ## Further Reading
 
@@ -333,10 +392,17 @@ insert here
   Where we sourced our data on tertiary enrollment levels.  
   <https://data.worldbank.org/indicator/SE.TER.ENRR>
 
+- **Importance of Tertiary School Enrollment**
+Motivation for why tertiary school enrollment levels are important
+  <https://www.worldbank.org/en/topic/tertiaryeducation>
+
 - **Impact of education on economic development**  
  Research into importance of education in economic development and beyond  
   <https://www.csis.org/analysis/investing-quality-education-economic-development-peace-and-stability>
 
+- **India Education for all**
+Research into increases in India's education
+  <https://dsel.education.gov.in/sites/default/files/2019-05/Manual_Planning_and_Apprisal.pdf>
 
   
   
