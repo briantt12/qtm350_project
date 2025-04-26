@@ -11,14 +11,12 @@ format:
     highlight-style: github  
   pdf:
     documentclass: article
-    classoption: twocolumn  
 jupyter: python3
 ---
 
 ## Report Highlights
 
 Oour report analyzes the evolution of primary, secondary, and tertiary school enrollment trends from 1990 to 2023 (this was collected in the dataset) in Afghanistan, India, and Japan, representing different stages of economic development.
-:::
 
 # Introduction
 
@@ -29,11 +27,11 @@ By conducting this analysis, we hope to assess the relationship between a countr
 
 # Data Description
 
-The data was sourced from the World Bank’s World Development Indicators via the \indicator{wbgapi} Python package. We selected three key indicators were used to assess enrollment across different educational levels:
+The data was sourced from the World Bank’s World Development Indicators via the wbgapi Python package. We selected three key indicators were used to assess enrollment across different educational levels:
 
-- Primary school enrollment, gross (%): \indicator{SE.PRM.ENRR}
-- Secondary school enrollment, gross (%): \indicator{SE.SEC.ENRR}
-- Tertiary school enrollment, gross (%): \indicator{SE.TER.ENRR}
+- Primary school enrollment, gross (%): {SE.PRM.ENRR}
+- Secondary school enrollment, gross (%): {SE.SEC.ENRR}
+- Tertiary school enrollment, gross (%): {SE.TER.ENRR}
 
 Data was collected for the years 1971–2020 for Afghanistan, India, and Japan. We wanted to make sure all the countries had the same year range so we removed years before and after (i.e. 1970) if they were not included in all three datasets. 
 
