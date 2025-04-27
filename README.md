@@ -32,7 +32,7 @@ cd qtm350_project
 
 ### 2. Run the Code
 - **SQL Scripts:** Run the code in data_cleaning_and_descriptive_stats.ipynb to create the data tables and access descriptive statistics.
-- **Python Scripts:** Run qmdDataAnalysisCode.ipynb to create plots and tables to be used within the report
+- **Python Scripts:** Run qmdDataAnalysisCode.ipynb to create plots and tables to be used within the report.
 - **Quarto Report:** Build and render the report using Quarto:
   ```bash
   quarto render "Final Project 350".qmd
